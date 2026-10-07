@@ -1,0 +1,11 @@
+__pycache__/
+*.egg-info/
+.ipynb_checkpoints/
+cellxgene_results/
+cellxgene_data/
+example_data/
+*.h5ad
+.DS_Store
+.pytest_cache/
+build/
+dist/

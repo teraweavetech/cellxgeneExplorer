@@ -1,0 +1,13 @@
+anndata>=0.9
+h5py>=3.8
+numpy
+pandas>=1.5
+scipy
+matplotlib
+requests
+tqdm
+ipywidgets>=8
+plotly>=5.15
+markdown
+openpyxl
+streamlit>=1.30

@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cellxgeneExplorer"
+version = "1.0.0"
+description = "Single-gene analysis of CELLxGENE single-cell datasets at cell, cell-type and patient level, with cross-study summaries"
+readme = "README.md"
+license = {file = "LICENSE.md"}
+authors = [{name = "TeraWeave Technologies"}]
+requires-python = ">=3.9"
+classifiers = ["License :: Other/Proprietary License", "Programming Language :: Python :: 3",
+               "Topic :: Scientific/Engineering :: Bio-Informatics", "Framework :: Jupyter"]
+dependencies = ["anndata>=0.9", "h5py>=3.8", "numpy", "pandas>=1.5", "scipy", "matplotlib", "requests", "tqdm",
+                "ipywidgets>=8", "plotly>=5.15", "markdown", "openpyxl", "streamlit>=1.30"]
+
+[project.optional-dependencies]
+dev = ["pytest", "nbformat", "nbconvert", "ipykernel"]
+
+[project.scripts]
+cxg-explorer = "cxg_explorer.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+cxg_explorer = ["r/*.R"]

@@ -1,0 +1,18 @@
+# Methods and statistics
+
+A Methods section tailored to each run, with dataset, thresholds and versions filled in, is written to `METHODS.md` in every results folder. This page describes the approach in general.
+
+**Data.** Datasets are downloaded from CELLxGENE Discover as H5AD files. Cell-type labels, donor identifiers, disease, tissue and sex annotations, and the authors' embedding are used as curated. Expression values are the deposited normalized matrix; if it holds raw counts, values are normalized to 10,000 counts per cell and log-transformed. A cell **expresses** the gene when at least one count is detected (raw counts when available).
+
+**Cellular and cell-specific levels.** For each group of cells (cell type, disease, tissue, sex, or a selected population): number of cells, number and proportion expressing, mean expression over all cells and among expressing cells, and the median among expressing cells.
+
+**Patient level.** A patient expresses the gene when at least *m* cells (default 3) and at least *p*% of its cells (default 1%) express it. Numbers and proportions of expressing patients are reported overall and per group, and under alternative thresholds as a sensitivity check. Groups are compared on per-patient proportions (two-sided Mann-Whitney U for two groups, Kruskal-Wallis for more); these tests treat patients, not cells, as replicates and are exploratory.
+
+**Differential expression (NEBULA).** Within each cell type, gene-positive and gene-negative cells are compared with a negative binomial mixed model (NEBULA-LN):
+`counts ~ status + standardized log(detected genes) [+ group]`, with a random intercept per donor and each cell's total counts as the offset. Analyses can be pooled across groups (group as covariate) or run within each group. Cell types need at least 20 positive and 20 negative cells and at least 3 donors contributing at least 3 cells of each class. At most 5,000 cells per class are used (random, fixed seed). Genes detected in at least 10% of either class are tested, excluding the gene itself. P-values are Benjamini-Hochberg adjusted over genes with reliable fits (NEBULA convergence code above -20). All thresholds are adjustable. Results describe co-expression, not regulation.
+
+**Cell proportions (Fisher's exact test).** Two-sided Fisher's exact tests on 2x2 tables of gene-positive and gene-negative cells: (i) each cell type against all other cells, overall and within each group; (ii) each pair of groups within each cell type. Odds ratios with Woolf 95% confidence intervals (0.5 continuity correction) and Benjamini-Hochberg FDR are reported. These tests count cells and therefore ignore donor-to-donor variation.
+
+**Cross-study summary.** Cells are never pooled across studies, and expression levels are not compared between studies, because each study's data is normalized differently. The summary compares detection proportions per study and cell type, consistency counts (in how many studies the gene is expressed above a threshold in each cell type, and how often each cell type ranks first), and patient-level proportions under one common rule, with Wilson 95% confidence intervals. Cell types are grouped into broad classes with an editable mapping. Cell-type reports repeat these per selected cell type and count how many studies show each gene as differentially expressed (from each study's NEBULA results).
+
+**Descriptive report (optional).** On request, a narrative report is drafted by the open-weight model gpt-oss:20b, run locally, using only the computed summary statistics. It is labelled as machine-generated and should be checked against the tables and figures.

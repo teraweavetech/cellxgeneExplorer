@@ -1,0 +1,9 @@
+name: cxg-explorer
+channels: [conda-forge]
+dependencies:
+  - python=3.11
+  - pip
+  - jupyterlab
+  - r-base>=4.4        # optional: only for NEBULA differential expression
+  - pip:
+      - -e .
